@@ -1,0 +1,6 @@
+@FarmaDev_HostAddress = http://localhost:5037
+
+GET {{FarmaDev_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
