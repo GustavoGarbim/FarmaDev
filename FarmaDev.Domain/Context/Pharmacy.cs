@@ -16,7 +16,7 @@ namespace FarmaDev.Domain.Context
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 
-        public Pharmacy(string name, string email, string number, string address, string city, string state, string postalCode, bool isActive, DateTime createdAt)
+        public Pharmacy(string name, string email, string number, string address, string city, string state, string postalCode, bool isActive)
         {
             Name = name;
             Email = email;
