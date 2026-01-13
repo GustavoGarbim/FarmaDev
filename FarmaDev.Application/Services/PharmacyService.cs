@@ -8,18 +8,16 @@ namespace FarmaDev.Application.Services
 {
     public class PharmacyService : IPharmacyService
     {
-        public readonly FarmaDevDbContext _context;
         public readonly IPharmacyRepository _pharmacyRepository;
 
-        public PharmacyService(FarmaDevDbContext context, IPharmacyRepository pharmacyRepository)
+        public PharmacyService(IPharmacyRepository pharmacyRepository)
         {
-            _context = context;
             _pharmacyRepository = pharmacyRepository;
         }
 
         public async Task<Pharmacy> CreatePharmacy(PharmacyDTO dto)
         {
-            var pharmacy = new Pharmacy(dto.Name, dto.Email, dto.Number, dto.Address, dto.City, dto.State, dto.PostalCode, true, DateTime.UtcNow.ToLocalTime());
+            var pharmacy = new Pharmacy(dto.Name, dto.Email, dto.Number, dto.Address, dto.City, dto.State, dto.PostalCode, true);
 
             await _pharmacyRepository.CreatePharma(pharmacy);
             await _pharmacyRepository.Commit();

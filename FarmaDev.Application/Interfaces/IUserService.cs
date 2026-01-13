@@ -1,15 +1,15 @@
-﻿using FarmaDev.Domain.Context;
+﻿using FarmaDev.Application.DTOs;
+using FarmaDev.Domain.Context;
 
-namespace FarmaDev.Domain.Interfaces
+namespace FarmaDev.Application.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserService
     {
-        Task CreateUser(User user);
+        Task<User> CreateUser(UserDTO dto);
         Task UpdateUser(User user);
         Task<User?> GetUserById(int id);
         Task<User?> GetUserByEmail(string email);
         Task<List<User>> GetAllUsers();
         Task DeleteUser(int id);
-        Task<bool> Commit();
     }
 }
