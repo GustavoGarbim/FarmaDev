@@ -5,21 +5,23 @@ using FarmaDev.Infraestructure.Data;
 using FarmaDev.Infraestructure.ExternalServices;
 using FarmaDev.Infraestructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var mailgunSettings = builder.Configuration.GetSection("MailgunSettings");
+var mailtrapSettings = builder.Configuration.GetSection("MailtrapSettings");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddFluentEmail("contato@suafarmacia.com")
-    .AddMailGunSender(
-        mailgunSettings["Domain"],
-        mailgunSettings["ApiKey"]
+    .AddFluentEmail("contact@farmadev.com.br")
+    .AddSmtpSender(
+        mailtrapSettings["Host"],
+        mailtrapSettings.GetValue<int>("Port"),
+        mailtrapSettings["Username"],
+        mailtrapSettings["Password"]
     );
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();

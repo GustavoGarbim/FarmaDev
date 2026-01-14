@@ -22,22 +22,36 @@ namespace FarmaDev.Application.Services
 
         public async Task<User> CreateUser(UserDTO dto)
         {
-            var cnf = await _userRepository.GetUserByEmail(dto.Email);
-            if (cnf != null)
+            var emailExistente = await _userRepository.GetUserByEmail(dto.Email);
+            if (emailExistente != null)
             {
                 throw new Exception("Email already registered. Try another email.");
             }
-            var user = new User(dto.PharmacyId ,dto.Username, dto.Email, dto.Password, dto.IsActive, false, UserEnum.Owner);
-            var empId = user.PharmacyId;
-            try
+            var pharmacy = await _pharmacyRepository.GetPharmaById(dto.PharmacyId);
+            if (pharmacy == null)
             {
-                var pharmacy = await _pharmacyRepository.GetPharmaById(empId);
-                await _emailSender.SendEmailRegister(user.Email, user.Username, pharmacy.Name);
+                throw new Exception($"Pharmacy with ID {dto.PharmacyId} not found.");
             }
-            catch{throw new Exception("User Pharmacy not found, try again later.");}
-            // Por enquanto todos os usuários criados são do tipo Owner
+            var user = new User(
+                dto.PharmacyId,
+                dto.Username,
+                dto.Email,
+                dto.Password,
+                dto.IsActive,
+                false,
+                UserEnum.Owner
+            );
             await _userRepository.CreateUser(user);
             await _userRepository.Commit();
+            try
+            {
+                await _emailSender.SendEmailRegisterUser(user.Email, user.Username, pharmacy.Name);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+            }
+
             return user;
         }
 

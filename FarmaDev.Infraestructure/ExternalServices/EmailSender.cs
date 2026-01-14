@@ -21,12 +21,21 @@ namespace FarmaDev.Infraestructure.ExternalServices
                 .SendAsync();
         }
 
-        public async Task SendEmailRegister(string toEmail, string clientName, string pharmacyName)
+        public async Task SendEmailRegisterUser(string toEmail, string clientName, string pharmacyName)
         {
             var email = await _serviceProvider.GetRequiredService<IFluentEmail>()
                 .To(toEmail)
                 .Subject($"Welcome to {pharmacyName}!")
                 .Body($"Dear {clientName},\n\nThank you for registering with {pharmacyName}. We're excited to have you on board!\n\nBest regards,\n{pharmacyName} Team")
+                .SendAsync();
+        }
+
+        public async Task SendEmailRegisterPharmacy(string toEmail, string pharmacyName)
+        {
+            var email = await _serviceProvider.GetRequiredService<IFluentEmail>()
+                .To(toEmail)
+                .Subject($"Pharmacy {pharmacyName} Registration Successful")
+                .Body($"Congratulations!, \n\n Your pharmacy, {pharmacyName}, has been successfully registered in our system.\n\nBest regards,\nFarmaDev Team")
                 .SendAsync();
         }
     }

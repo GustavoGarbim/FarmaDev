@@ -2,22 +2,26 @@
 using FarmaDev.Application.Interfaces;
 using FarmaDev.Domain.Context;
 using FarmaDev.Domain.Interfaces;
-using FarmaDev.Infraestructure.Data;
+using FarmaDev.Infraestructure.ExternalServices;
 
 namespace FarmaDev.Application.Services
 {
     public class PharmacyService : IPharmacyService
     {
         public readonly IPharmacyRepository _pharmacyRepository;
+        private readonly IEmailSender _emailSender;
 
-        public PharmacyService(IPharmacyRepository pharmacyRepository)
+        public PharmacyService(IPharmacyRepository pharmacyRepository, IEmailSender emailSender)
         {
             _pharmacyRepository = pharmacyRepository;
+            _emailSender = emailSender;
         }
 
         public async Task<Pharmacy> CreatePharmacy(PharmacyDTO dto)
         {
             var pharmacy = new Pharmacy(dto.Name, dto.Email, dto.Number, dto.Address, dto.City, dto.State, dto.PostalCode, true);
+
+            await _emailSender.SendEmailRegisterPharmacy(pharmacy.Email, pharmacy.Name);
 
             await _pharmacyRepository.CreatePharma(pharmacy);
             await _pharmacyRepository.Commit();
