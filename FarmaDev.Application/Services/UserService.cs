@@ -3,16 +3,21 @@ using FarmaDev.Application.Interfaces;
 using FarmaDev.Domain.Context;
 using FarmaDev.Domain.Enums;
 using FarmaDev.Domain.Interfaces;
+using FarmaDev.Infraestructure.ExternalServices;
 
 namespace FarmaDev.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly IPharmacyRepository _pharmacyRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IEmailSender emailSender, IPharmacyRepository pharmacyRepository)
         {
             _userRepository = userRepository;
+            _emailSender = emailSender;
+            _pharmacyRepository = pharmacyRepository;
         }
 
         public async Task<User> CreateUser(UserDTO dto)
@@ -20,10 +25,16 @@ namespace FarmaDev.Application.Services
             var cnf = await _userRepository.GetUserByEmail(dto.Email);
             if (cnf != null)
             {
-                throw new Exception("Email já cadastrado");
+                throw new Exception("Email already registered. Try another email.");
             }
-
-            var user = new User(dto.Username, dto.Email, dto.Password, dto.IsActive, false, UserEnum.Owner);
+            var user = new User(dto.PharmacyId ,dto.Username, dto.Email, dto.Password, dto.IsActive, false, UserEnum.Owner);
+            var empId = user.PharmacyId;
+            try
+            {
+                var pharmacy = await _pharmacyRepository.GetPharmaById(empId);
+                await _emailSender.SendEmailRegister(user.Email, user.Username, pharmacy.Name);
+            }
+            catch{throw new Exception("User Pharmacy not found, try again later.");}
             // Por enquanto todos os usuários criados são do tipo Owner
             await _userRepository.CreateUser(user);
             await _userRepository.Commit();
