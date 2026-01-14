@@ -25,6 +25,12 @@ namespace FarmaDev.Api.Controllers
             return BadRequest("Pharmacy could not be created, try again later.");
         }
 
+        [HttpPost("register-user")]
+        public async Task RegisterUser([FromBody] PharmacyRegisterUserDTO dto)
+        {
+            await _pharmacyService.RegisterUser(dto);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPharmacyById(int id)
         {

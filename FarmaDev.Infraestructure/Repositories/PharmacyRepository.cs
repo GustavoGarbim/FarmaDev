@@ -37,6 +37,19 @@ namespace FarmaDev.Infraestructure.Repositories
             }
         }
 
+        public async Task RegisterUser(int pharmacyId, int userId)
+        {
+            var pharmacy = await GetPharmaById(pharmacyId);
+            if (pharmacy != null)
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    user.PharmacyId = pharmacyId;
+                }
+            }
+        }
+
         public async Task<bool> Commit()
         {
             return await _context.SaveChangesAsync() > 0;

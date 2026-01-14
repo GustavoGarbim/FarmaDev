@@ -9,5 +9,6 @@ namespace FarmaDev.Application.Interfaces
         Task<List<Pharmacy>> ListPharmacys();
         Task<Pharmacy?> GetPharmacyById(int id); 
         Task<bool> DeletePharmacy(int id);
+        Task RegisterUser(PharmacyRegisterUserDTO dto);
     }
 }

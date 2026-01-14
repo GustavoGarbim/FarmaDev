@@ -24,6 +24,12 @@ namespace FarmaDev.Application.Services
             return pharmacy;
         }
 
+        public async Task RegisterUser(PharmacyRegisterUserDTO dto)
+        {
+            await _pharmacyRepository.RegisterUser(dto.PharmacyId, dto.UserId);
+            await _pharmacyRepository.Commit();
+        }
+
         public async Task<Pharmacy?> GetPharmacyById(int id)
         {
             return await _pharmacyRepository.GetPharmaById(id);
