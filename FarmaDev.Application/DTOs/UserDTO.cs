@@ -1,7 +1,4 @@
-﻿using FarmaDev.Domain.Context;
-using FarmaDev.Domain.Enums;
-
-namespace FarmaDev.Application.DTOs
+﻿namespace FarmaDev.Application.DTOs
 {
     public class UserDTO
     {

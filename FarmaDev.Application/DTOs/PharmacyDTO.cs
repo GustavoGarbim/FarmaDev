@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FarmaDev.Application.DTOs
+﻿namespace FarmaDev.Application.DTOs
 {
     public class PharmacyDTO
     {
@@ -15,5 +9,11 @@ namespace FarmaDev.Application.DTOs
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
+    }
+
+    public class PharmacyRegisterUserDTO
+    {
+        public int PharmacyId { get; set; }
+        public int UserId { get; set; }
     }
 }

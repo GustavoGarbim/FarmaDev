@@ -1,6 +1,5 @@
 ﻿using FarmaDev.Application.DTOs;
 using FarmaDev.Application.Interfaces;
-using FarmaDev.Domain.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FarmaDev.Api.Controllers
